@@ -551,6 +551,14 @@ function normalizeFunctionPath(pathname: string) {
     const stripped = pathname.slice(FUNCTION_PATH.length);
     return stripped || "/";
   }
+  const slugPrefix = `/${FUNCTION_NAME}`;
+  if (pathname === slugPrefix) {
+    return "/";
+  }
+  if (pathname.startsWith(`${slugPrefix}/`)) {
+    const stripped = pathname.slice(slugPrefix.length);
+    return stripped || "/";
+  }
   if (pathname.startsWith("/functions/v1/")) {
     const stripped = pathname.replace(/^\/functions\/v1\/[^/]+/u, "");
     return stripped || "/";
