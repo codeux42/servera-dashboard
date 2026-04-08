@@ -1,6 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
-const FUNCTION_NAME = "servera-api";
+const FUNCTION_NAME = "smart-worker";
 const FUNCTION_PATH = `/functions/v1/${FUNCTION_NAME}`;
 const SESSION_COOKIE_NAME = "servera_sid";
 const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000;
@@ -66,12 +66,24 @@ Deno.serve(async (request) => {
     const url = new URL(request.url);
     const pathname = normalizeFunctionPath(url.pathname);
 
+    if (pathname === "/") {
+      return json(
+        200,
+        {
+          ok: true,
+          service: FUNCTION_NAME,
+          hint: "Use /health, /api/* or /auth/* routes.",
+        },
+        headers,
+      );
+    }
+
     if (request.method === "GET" && pathname === "/health") {
       return json(
         200,
         {
           ok: true,
-          service: "servera-api",
+          service: FUNCTION_NAME,
         },
         headers,
       );
@@ -527,11 +539,15 @@ function redirect(location: string, headers: Headers) {
 }
 
 function normalizeFunctionPath(pathname: string) {
-  if (!pathname.startsWith(FUNCTION_PATH)) {
-    return pathname;
+  if (pathname.startsWith(FUNCTION_PATH)) {
+    const stripped = pathname.slice(FUNCTION_PATH.length);
+    return stripped || "/";
   }
-  const stripped = pathname.slice(FUNCTION_PATH.length);
-  return stripped || "/";
+  if (pathname.startsWith("/functions/v1/")) {
+    const stripped = pathname.replace(/^\/functions\/v1\/[^/]+/u, "");
+    return stripped || "/";
+  }
+  return pathname;
 }
 
 async function listCachedGuilds() {
