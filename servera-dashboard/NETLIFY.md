@@ -16,29 +16,27 @@ URL attendue:
 
 - `https://servera-dashboard.netlify.app`
 
-## Proxy backend
+## API directe
 
-Le front est deja configure pour proxy:
+Le front parle directement a la fonction Supabase:
 
 ```txt
-/api/*  https://servera-dashboard.onrender.com/api/:splat  200
-/auth/* https://servera-dashboard.onrender.com/auth/:splat 200
-/*      /index.html                                             200
+https://gxsxdcwwqxiiivtoyzha.supabase.co/functions/v1/servera-api
 ```
 
-Ces regles sont dans:
+Cette valeur est deja preparee dans:
 
-- [public/_redirects](C:\Users\Utilisateur\Desktop\AnimoraTV\servera-dashboard\public\_redirects)
+- [runtime-config.js](C:\Users\Utilisateur\Desktop\AnimoraTV\servera-dashboard\public\runtime-config.js)
 
 ## Discord OAuth2
 
 Dans Discord Developer Portal, ajoute exactement:
 
 ```txt
-https://servera-dashboard.netlify.app/auth/discord/callback
+https://gxsxdcwwqxiiivtoyzha.supabase.co/functions/v1/servera-api/auth/discord/callback
 ```
 
 ## Important
 
-Netlify sert seulement le front. L'auth Discord et l'API passent par le backend
-Render via les rewrites ci-dessus.
+Netlify sert seulement le front. L'auth Discord et l'API passent maintenant par
+la fonction Supabase `servera-api`.

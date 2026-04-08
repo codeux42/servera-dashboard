@@ -364,9 +364,9 @@ function renderNotice() {
   if (!state.backendReachable) {
     dom.authNotice.classList.remove("hidden");
     dom.authNotice.querySelector("h3").textContent =
-      "Le frontend Netlify n'est pas encore relie au backend.";
+      "Le frontend Netlify n'est pas encore relie a la fonction Supabase.";
     dom.authNoticeText.textContent =
-      "Active le proxy /api/* et /auth/* dans public/_redirects avec l'URL du backend, sinon la connexion Discord ne peut pas fonctionner.";
+      "Verifie public/runtime-config.js et le deploiement de la fonction servera-api dans Supabase, sinon la connexion Discord ne peut pas fonctionner.";
     return;
   }
 
@@ -1117,7 +1117,7 @@ function filteredServers() {
 function startDiscordLogin() {
   if (!state.backendReachable) {
     notify(
-      "Connexion Discord impossible: Netlify n'est pas encore relie au backend /auth.",
+      "Connexion Discord impossible: Netlify n'est pas encore relie a la fonction Supabase /auth.",
       "error",
     );
     return;

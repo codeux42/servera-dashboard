@@ -1,4 +1,4 @@
 window.SERVERA_CONFIG = window.SERVERA_CONFIG || {
-  apiBase: "",
-  authBase: "",
+  apiBase: "https://gxsxdcwwqxiiivtoyzha.supabase.co/functions/v1/servera-api",
+  authBase: "https://gxsxdcwwqxiiivtoyzha.supabase.co/functions/v1/servera-api",
 };

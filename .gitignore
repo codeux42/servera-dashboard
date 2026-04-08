@@ -1,5 +1,6 @@
 *
 !.gitignore
-!render.yaml
+!supabase/
+!supabase/**
 !servera-dashboard/
 !servera-dashboard/**

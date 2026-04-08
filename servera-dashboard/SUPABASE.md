@@ -2,33 +2,45 @@
 
 ## Objectif
 
-Recuperer une URL Postgres gratuite pour la variable `DATABASE_URL`.
+Tout faire sans Render :
+
+- base Postgres
+- sessions dashboard
+- OAuth Discord
+- API dashboard via Edge Function
 
 ## Etapes
 
-1. Cree un compte sur Supabase.
-2. Cree un nouveau projet.
-3. Attends que la base soit provisionnee.
-4. Recupere la chaine de connexion Postgres du projet.
-5. Colle cette valeur dans `DATABASE_URL` sur Render.
-
-## Variables a garder sur Render
+1. Cree un projet Supabase.
+2. Ouvre `SQL Editor`.
+3. Execute le SQL de [20260408_servera_dashboard.sql](C:\Users\Utilisateur\Desktop\AnimoraTV\supabase\migrations\20260408_servera_dashboard.sql).
+4. Ouvre `Edge Functions`.
+5. Cree ou deploie la fonction `servera-api` avec le code de [index.ts](C:\Users\Utilisateur\Desktop\AnimoraTV\supabase\functions\servera-api\index.ts).
+6. Desactive la verification JWT pour cette fonction.
+7. Ajoute les secrets suivants dans Supabase Edge Functions :
 
 ```env
-DATABASE_URL=postgresql://...
-DATABASE_SSL=true
+APP_URL=https://servera-dashboard.netlify.app
+DISCORD_CLIENT_ID=1480878152816529501
+DISCORD_CLIENT_SECRET=...
+DISCORD_REDIRECT_URI=https://gxsxdcwwqxiiivtoyzha.supabase.co/functions/v1/servera-api/auth/discord/callback
+DISCORD_BOT_CLIENT_ID=1480878152816529501
+DISCORD_BOT_TOKEN=...
+DISCORD_BOT_PERMISSIONS=8
+ALLOW_DEV_LOGIN=false
 ```
 
 ## Resultat
 
-Une fois `DATABASE_URL` ajoutee:
+Une fois la fonction et les tables en place :
 
-- Render Free utilise Postgres au lieu de la memoire
+- Supabase remplace Render completement
+- Netlify parle directement a `servera-api`
 - les reglages dashboard restent persistants
 - le bot et le dashboard peuvent partager la meme base
 
 ## Important
 
-- garde cette URL privee
-- ne la mets pas dans Netlify
-- mets-la seulement dans le backend Render
+- la callback Discord n'est plus sur Netlify
+- elle doit pointer vers la fonction Supabase
+- le bot doit ecrire dans les memes tables Postgres

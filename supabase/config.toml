@@ -1,0 +1,4 @@
+project_id = "gxsxdcwwqxiiivtoyzha"
+
+[functions.servera-api]
+verify_jwt = false
