@@ -1,0 +1,11 @@
+{
+  "name": "servera-dashboard",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "check": "node --check src/config.js && node --check src/discord.js && node --check src/db.js && node --check src/server.js && node --check src/self-test.js",
+    "test": "node src/self-test.js"
+  }
+}

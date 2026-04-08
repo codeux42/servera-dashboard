@@ -1,0 +1,4 @@
+/api/*  https://servera-dashboard-api.onrender.com/api/:splat  200
+/auth/* https://servera-dashboard-api.onrender.com/auth/:splat 200
+
+/* /index.html 200

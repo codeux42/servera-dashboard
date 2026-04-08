@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Servera</title>
+    <meta
+      name="description"
+      content="Dashboard Discord Servera avec auth, tickets, logs, avis, stats et synchronisation SQLite."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/runtime-config.js"></script>
+    <script defer src="/app.js"></script>
+  </head>
+  <body>
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
+    <div class="background-grid"></div>
+
+    <div class="site-shell">
+      <header class="topbar">
+        <div class="brand-block">
+          <div class="brand-logo">S</div>
+          <div>
+            <p class="eyebrow eyebrow-tight">Servera control center</p>
+            <h1 class="brand-title">Dashboard Servera</h1>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <div class="sync-pill">
+            <span class="status-dot live"></span>
+            <span>SQLite live sync</span>
+          </div>
+          <div id="headerActions" class="header-actions"></div>
+        </div>
+      </header>
+
+      <main class="main-layout">
+        <section class="hero-card card">
+          <div class="hero-copy">
+            <p class="eyebrow">Discord dashboard</p>
+            <h2>Rose, noir, moderne et relie a ton bot sans redemarrage.</h2>
+            <p class="hero-text">
+              Connexion Discord, verification admin, gestion tickets, logs,
+              avis, statistiques et configuration generale, le tout branche sur
+              la meme base SQLite que le bot.
+            </p>
+
+            <div class="hero-actions">
+              <button id="heroLoginButton" class="primary-button">
+                Connexion Discord
+              </button>
+              <button id="heroDemoButton" class="ghost-button hidden">
+                Mode demo
+              </button>
+            </div>
+
+            <div class="hero-badges">
+              <span class="hero-badge">Admin only routes</span>
+              <span class="hero-badge">Tickets + claims</span>
+              <span class="hero-badge">Avis + stats</span>
+              <span class="hero-badge">Responsive mobile + PC</span>
+            </div>
+          </div>
+
+          <div class="hero-side">
+            <div class="metric-stack">
+              <article class="metric-card accent">
+                <p class="metric-label">Auth</p>
+                <strong>Discord OAuth2</strong>
+                <span>pseudo, avatar, serveurs admin</span>
+              </article>
+              <article class="metric-card dark">
+                <p class="metric-label">Sync</p>
+                <strong>Temps reel</strong>
+                <span>lecture/ecriture directe SQLite</span>
+              </article>
+              <article class="metric-card gradient">
+                <p class="metric-label">UI</p>
+                <strong>MEE6 x DraftBot vibe</strong>
+                <span>cards, graphiques, toasts et mobile</span>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="feature-strip">
+          <article class="feature-card card">
+            <p class="feature-kicker">Auth</p>
+            <h3>Connexion Discord</h3>
+            <p>Login OAuth2, session securisee, routes protegees et check admin.</p>
+          </article>
+          <article class="feature-card card">
+            <p class="feature-kicker">Serveurs</p>
+            <h3>Serveurs admin uniquement</h3>
+            <p>Statut bot present ou absent, plus bouton d'invitation si besoin.</p>
+          </article>
+          <article class="feature-card card">
+            <p class="feature-kicker">Tickets</p>
+            <h3>Config support + suivi</h3>
+            <p>Categories, roles support, tickets actifs, claims et utilisateurs.</p>
+          </article>
+          <article class="feature-card card">
+            <p class="feature-kicker">Logs</p>
+            <h3>Activation rapide</h3>
+            <p>Toggle des logs et selection du salon de trace.</p>
+          </article>
+          <article class="feature-card card">
+            <p class="feature-kicker">Avis</p>
+            <h3>Notes et stats</h3>
+            <p>Moyenne, volume, distribution et activite recente.</p>
+          </article>
+          <article class="feature-card card">
+            <p class="feature-kicker">Config</p>
+            <h3>Parametres generaux</h3>
+            <p>Prefixe, langue, notifications, auto-mod et theme.</p>
+          </article>
+        </section>
+
+        <section id="authNotice" class="notice-card card">
+          <div>
+            <p class="eyebrow eyebrow-tight">Etat</p>
+            <h3>Connecte-toi pour ouvrir le dashboard.</h3>
+            <p id="authNoticeText" class="notice-copy">
+              Le dashboard chargera ensuite tes serveurs administrables et leur
+              configuration live.
+            </p>
+          </div>
+        </section>
+
+        <section id="dashboardSection" class="dashboard-section hidden">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow eyebrow-tight">Serveurs</p>
+              <h3>Choisis un serveur a administrer</h3>
+            </div>
+
+            <div class="section-head-actions">
+              <input
+                id="serverSearchInput"
+                class="text-input"
+                type="search"
+                placeholder="Rechercher un serveur..."
+              />
+              <button id="refreshButton" class="ghost-button">Rafraichir</button>
+            </div>
+          </div>
+
+          <div id="serverGrid" class="server-grid"></div>
+
+          <div id="emptyServersState" class="empty-panel card hidden">
+            <h3>Aucun serveur admin detecte</h3>
+            <p>
+              Connecte un compte qui possede la permission administrateur sur au
+              moins un serveur Discord.
+            </p>
+          </div>
+
+          <section id="serverWorkspace" class="server-workspace hidden">
+            <div id="workspaceHeader" class="workspace-header card"></div>
+            <div id="workspaceTabs" class="workspace-tabs"></div>
+            <div id="workspacePanels" class="workspace-panels"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <div id="toastRack" class="toast-rack" aria-live="polite"></div>
+  </body>
+</html>
