@@ -21,6 +21,7 @@ URL attendue:
 Le front parle directement a la fonction Supabase:
 
 ```txt
+Les routes `/api/*`, `/auth/*` et `/health` sont proxyes par Netlify vers :
 https://gxsxdcwwqxiiivtoyzha.supabase.co/functions/v1/smart-worker
 ```
 
@@ -33,7 +34,7 @@ Cette valeur est deja preparee dans:
 Dans Discord Developer Portal, ajoute exactement:
 
 ```txt
-https://gxsxdcwwqxiiivtoyzha.supabase.co/functions/v1/smart-worker/auth/discord/callback
+https://servera-dashboard.netlify.app/auth/discord/callback
 ```
 
 ## Important

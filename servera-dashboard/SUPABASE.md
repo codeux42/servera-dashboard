@@ -23,7 +23,7 @@ Tout faire sans Render :
 APP_URL=https://servera-dashboard.netlify.app
 DISCORD_CLIENT_ID=1480878152816529501
 DISCORD_CLIENT_SECRET=...
-DISCORD_REDIRECT_URI=https://gxsxdcwwqxiiivtoyzha.supabase.co/functions/v1/smart-worker/auth/discord/callback
+DISCORD_REDIRECT_URI=https://servera-dashboard.netlify.app/auth/discord/callback
 DISCORD_BOT_CLIENT_ID=1480878152816529501
 DISCORD_BOT_TOKEN=...
 DISCORD_BOT_PERMISSIONS=8

@@ -1,1 +1,4 @@
-/* /index.html 200
+/api/*  https://gxsxdcwwqxiiivtoyzha.supabase.co/functions/v1/smart-worker/api/:splat  200
+/auth/* https://gxsxdcwwqxiiivtoyzha.supabase.co/functions/v1/smart-worker/auth/:splat 200
+/health  https://gxsxdcwwqxiiivtoyzha.supabase.co/functions/v1/smart-worker/health      200
+/*       /index.html                                                                  200
