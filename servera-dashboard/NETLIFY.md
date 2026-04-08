@@ -21,8 +21,8 @@ URL attendue:
 Le front est deja configure pour proxy:
 
 ```txt
-/api/*  https://servera-dashboard-api.onrender.com/api/:splat  200
-/auth/* https://servera-dashboard-api.onrender.com/auth/:splat 200
+/api/*  https://servera-dashboard.onrender.com/api/:splat  200
+/auth/* https://servera-dashboard.onrender.com/auth/:splat 200
 /*      /index.html                                             200
 ```
 

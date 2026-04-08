@@ -4,7 +4,7 @@
 
 Creer un `Web Service` Render avec:
 
-- Name: `servera-dashboard-api`
+- Name: `servera-dashboard`
 - Runtime: `Node`
 - Branch: `main`
 - Region: `Frankfurt`
@@ -47,7 +47,7 @@ Le backend expose:
 URL attendue si tu gardes le nom propose:
 
 ```txt
-https://servera-dashboard-api.onrender.com
+https://servera-dashboard.onrender.com
 ```
 
 ## Important

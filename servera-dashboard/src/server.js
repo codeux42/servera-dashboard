@@ -75,7 +75,7 @@ async function handleRequest(context) {
     if (request.method === "GET" && pathname === "/health") {
       return sendJson(response, 200, {
         ok: true,
-        service: "servera-dashboard-api",
+        service: "servera-dashboard",
       });
     }
 

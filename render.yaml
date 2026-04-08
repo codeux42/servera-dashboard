@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: servera-dashboard-api
+    name: servera-dashboard
     runtime: node
     rootDir: servera-dashboard
     plan: free
