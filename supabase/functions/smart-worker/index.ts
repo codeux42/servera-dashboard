@@ -61,8 +61,6 @@ Deno.serve(async (request) => {
   }
 
   try {
-    await cleanupExpiredRows();
-
     const url = new URL(request.url);
     const pathname = normalizeFunctionPath(url.pathname);
 
@@ -100,6 +98,8 @@ Deno.serve(async (request) => {
         headers,
       );
     }
+
+    await safeCleanupExpiredRows();
 
     if (request.method === "GET" && pathname === "/api/session") {
       const session = await getSessionFromRequest(request);
@@ -336,6 +336,14 @@ async function cleanupExpiredRows() {
     supabaseAdmin.from("dashboard_sessions").delete().lt("expires_at", now),
     supabaseAdmin.from("dashboard_oauth_states").delete().lt("expires_at", now),
   ]);
+}
+
+async function safeCleanupExpiredRows() {
+  try {
+    await cleanupExpiredRows();
+  } catch (error) {
+    console.warn("cleanupExpiredRows failed", error);
+  }
 }
 
 async function createSessionRedirectResponse(

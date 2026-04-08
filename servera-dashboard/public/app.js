@@ -10,6 +10,7 @@ const state = {
   loadingDashboard: false,
   refreshInFlight: false,
   backendReachable: false,
+  backendError: "",
 };
 
 const dom = {};
@@ -140,21 +141,32 @@ async function bootstrap() {
 }
 
 async function loadPublicConfig() {
-  const payload = await apiJson("/api/public-config", {
-    public: true,
-  });
-  state.backendReachable =
-    typeof payload.oauthEnabled === "boolean" &&
-    typeof payload.devLoginEnabled === "boolean" &&
-    typeof payload.botInviteConfigured === "boolean";
+  try {
+    const payload = await apiJson("/api/public-config", {
+      public: true,
+    });
+    state.backendReachable =
+      typeof payload.oauthEnabled === "boolean" &&
+      typeof payload.devLoginEnabled === "boolean" &&
+      typeof payload.botInviteConfigured === "boolean";
+    state.backendError = "";
 
-  state.publicConfig = state.backendReachable
-    ? payload
-    : {
-        oauthEnabled: false,
-        devLoginEnabled: false,
-        botInviteConfigured: false,
-      };
+    state.publicConfig = state.backendReachable
+      ? payload
+      : {
+          oauthEnabled: false,
+          devLoginEnabled: false,
+          botInviteConfigured: false,
+        };
+  } catch (error) {
+    state.backendReachable = false;
+    state.backendError = error.message || "Impossible de joindre /api/public-config.";
+    state.publicConfig = {
+      oauthEnabled: false,
+      devLoginEnabled: false,
+      botInviteConfigured: false,
+    };
+  }
 
   dom.heroDemoButton.classList.toggle(
     "hidden",
@@ -362,13 +374,14 @@ function renderHeader() {
 
 function renderNotice() {
   if (!state.backendReachable) {
-    dom.authNotice.classList.remove("hidden");
-    dom.authNotice.querySelector("h3").textContent =
-      "Le frontend Netlify n'est pas encore relie a la fonction Supabase.";
-    dom.authNoticeText.textContent =
-        "Verifie public/runtime-config.js et le deploiement de la fonction smart-worker dans Supabase, sinon la connexion Discord ne peut pas fonctionner.";
-    return;
-  }
+      dom.authNotice.classList.remove("hidden");
+      dom.authNotice.querySelector("h3").textContent =
+        "Le frontend Netlify n'est pas encore relie a la fonction Supabase.";
+      dom.authNoticeText.textContent =
+          state.backendError ||
+          "Verifie public/_redirects, le redeploiement Netlify et la fonction smart-worker dans Supabase.";
+      return;
+    }
 
   if (!state.session) {
     dom.authNotice.classList.remove("hidden");
@@ -1116,11 +1129,12 @@ function filteredServers() {
 
 function startDiscordLogin() {
   if (!state.backendReachable) {
-    notify(
-      "Connexion Discord impossible: Netlify n'est pas encore relie a la fonction Supabase /auth.",
-      "error",
-    );
-    return;
+      notify(
+        state.backendError ||
+          "Connexion Discord impossible: Netlify n'est pas encore relie a la fonction Supabase /auth.",
+        "error",
+      );
+      return;
   }
 
   if (!state.publicConfig?.oauthEnabled) {
