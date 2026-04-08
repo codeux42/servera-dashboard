@@ -57,6 +57,7 @@ export function createApp(overrides = {}) {
 
 export async function startServer(overrides = {}) {
   const app = createApp(overrides);
+  await app.store.ready;
   await new Promise((resolvePromise) => {
     app.server.listen(app.config.port, resolvePromise);
   });
@@ -163,7 +164,7 @@ async function handleRequest(context) {
           handle: "servera-admin",
           avatarUrl: "",
         },
-        guilds: store.listCachedGuilds(),
+        guilds: await store.listCachedGuilds(),
       });
 
       return sendJson(response, 200, {
@@ -202,7 +203,7 @@ async function handleRequest(context) {
       }
 
       return sendJson(response, 200, {
-        servers: store.listServerCards(session.guilds),
+        servers: await store.listServerCards(session.guilds),
       });
     }
 
@@ -219,7 +220,7 @@ async function handleRequest(context) {
       }
 
       const { snapshot, warning } = await loadGuildSnapshot(config, guild.id);
-      const payload = store.getGuildDashboard(guild, snapshot);
+      const payload = await store.getGuildDashboard(guild, snapshot);
       payload.inviteUrl = buildBotInviteUrl(config, guild.id);
       payload.warnings = warning ? [warning] : [];
       payload.botTokenConfigured = Boolean(config.discord.botToken);
@@ -244,7 +245,7 @@ async function handleRequest(context) {
 
       const body = await parseJsonBody(request);
       const { snapshot } = await loadGuildSnapshot(config, guild.id);
-      const settings = store.updateTicketSettings(guild.id, body, snapshot?.resources || {});
+      const settings = await store.updateTicketSettings(guild.id, body, snapshot?.resources || {});
       return sendJson(response, 200, {
         ok: true,
         settings,
@@ -269,7 +270,7 @@ async function handleRequest(context) {
 
       const body = await parseJsonBody(request);
       const { snapshot } = await loadGuildSnapshot(config, guild.id);
-      const settings = store.updateLogSettings(guild.id, body, snapshot?.resources || {});
+      const settings = await store.updateLogSettings(guild.id, body, snapshot?.resources || {});
       return sendJson(response, 200, {
         ok: true,
         settings,
@@ -293,7 +294,7 @@ async function handleRequest(context) {
       }
 
       const body = await parseJsonBody(request);
-      const settings = store.updateGeneralSettings(guild.id, body);
+      const settings = await store.updateGeneralSettings(guild.id, body);
       return sendJson(response, 200, {
         ok: true,
         settings,
@@ -323,11 +324,11 @@ async function loadGuildSnapshot(config, guildId) {
       warning: null,
     };
   } catch (error) {
-    return {
-      snapshot: null,
-      warning:
-        "Discord bot API indisponible. Affichage base sur le cache SQLite local.",
-    };
+      return {
+        snapshot: null,
+        warning:
+        "Discord bot API indisponible. Affichage base sur le cache local du dashboard.",
+      };
   }
 }
 

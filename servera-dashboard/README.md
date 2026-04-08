@@ -1,118 +1,83 @@
 # Servera Dashboard
 
-Dashboard web Discord pour Servera, construit sans dependances backend externes:
+Dashboard web Discord pour Servera avec:
 
-- auth Discord OAuth2
-- affichage des serveurs admin uniquement
-- statut bot present ou absent
-- configuration tickets, logs et parametres generaux
-- stats avis + graphiques
-- lecture/ecriture directe sur SQLite
+- connexion Discord OAuth2
+- serveurs admin uniquement
+- tickets, logs, avis, stats, configuration
+- front Netlify
+- backend Node Render
+- base Postgres gratuite type Supabase
 
-## Lancer le projet
+## Stack gratuite
 
-1. Copier `.env.example` vers `.env`
-2. Renseigner les variables Discord
-3. Lancer:
+- Front: Netlify
+- API: Render Free
+- Base: Supabase Postgres Free
+
+Le backend peut tourner en mode:
+
+- `postgres` si `DATABASE_URL` est defini
+- `memory` sinon, pratique pour le local/demo
+
+## Variables
+
+```env
+PORT=3000
+APP_URL=https://servera-dashboard.netlify.app
+SESSION_SECRET=replace-with-a-long-random-secret
+DATABASE_URL=
+DATABASE_SSL=true
+
+DISCORD_CLIENT_ID=
+DISCORD_CLIENT_SECRET=
+DISCORD_REDIRECT_URI=https://servera-dashboard.netlify.app/auth/discord/callback
+DISCORD_BOT_CLIENT_ID=
+DISCORD_BOT_TOKEN=
+DISCORD_BOT_PERMISSIONS=8
+
+ALLOW_DEV_LOGIN=false
+SEED_DEMO_DATA=false
+```
+
+## Local
+
+Pour lancer localement sans Postgres:
 
 ```powershell
 node src/server.js
 ```
 
-Le dashboard sera servi sur `http://localhost:3000` par defaut.
+Si `DATABASE_URL` est vide, le serveur utilise le mode memoire.
 
-## Variables importantes
-
-- `APP_URL`: URL publique du dashboard
-- `SESSION_SECRET`: secret des sessions
-- `DATABASE_PATH`: chemin vers la base SQLite partagee
-- `DISCORD_CLIENT_ID`: client OAuth2 du dashboard
-- `DISCORD_CLIENT_SECRET`: secret OAuth2
-- `DISCORD_REDIRECT_URI`: callback OAuth2
-- `DISCORD_BOT_CLIENT_ID`: client id du bot pour le lien d'invitation
-- `DISCORD_BOT_TOKEN`: token bot pour lire roles/salons live
-- `DISCORD_BOT_PERMISSIONS`: permissions du lien d'invitation
-- `ALLOW_DEV_LOGIN=true`: active le login demo local
-- `SEED_DEMO_DATA=true`: injecte des donnees demo si la base est vide
-
-## Scripts utiles
+## Test local
 
 ```powershell
 node src/self-test.js
 ```
 
-Verifie:
+## Tables attendues
 
-- login demo
-- session
-- listing serveurs
-- chargement dashboard
-- sauvegarde logs
-
-## Schema SQLite
-
-Le dashboard cree et lit les tables suivantes:
+Le backend cree automatiquement:
 
 - `guild_cache`
 - `guild_settings`
 - `ticket_records`
 - `review_records`
 
-### Ce que le bot doit ecrire
+## Ce que le bot doit synchroniser
 
-Pour une synchro temps reel, ton bot doit utiliser la meme base SQLite et tenir ces donnees a jour:
+Le bot doit lire/ecrire la meme base Postgres que le dashboard pour que tout se
+mette a jour en temps reel:
 
-- `guild_cache`: presence bot, roles, salons et stats serveur
-- `ticket_records`: creation, claim, fermeture et utilisateur du ticket
-- `review_records`: note, auteur, commentaire et date
+- presence bot par serveur
+- roles et salons
+- tickets ouverts/claim/fermes
+- avis utilisateurs
+- config tickets/logs/general
 
-Le dashboard ecrit de son cote:
+## Deploy
 
-- `guild_settings.ticket_category_id`
-- `guild_settings.support_roles_json`
-- `guild_settings.logs_enabled`
-- `guild_settings.log_channel_id`
-- `guild_settings.general_json`
-
-## Presence du bot
-
-Le dashboard marque un serveur comme present si:
-
-- le bot repond via `DISCORD_BOT_TOKEN`, ou
-- le cache SQLite indique `bot_present = 1`
-
-Si le bot est absent, le dashboard affiche automatiquement un bouton
-"Inviter le bot".
-
-## Notes integration bot
-
-Si ton bot est aussi en Node, il peut reutiliser directement la meme base.
-
-Exemple d'idee:
-
-```js
-import { DatabaseSync } from "node:sqlite";
-
-const db = new DatabaseSync("path/to/servera-dashboard.sqlite");
-
-db.prepare(`
-  INSERT INTO ticket_records (
-    guild_id, channel_id, channel_name, user_id, username,
-    claimed_by_id, claimed_by_name, status, topic, created_at, updated_at
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-`).run(
-  guildId,
-  channelId,
-  channelName,
-  userId,
-  username,
-  null,
-  null,
-  "open",
-  topic,
-  new Date().toISOString(),
-  new Date().toISOString(),
-);
-```
-
-Tant que le bot lit la config en base ou recharge a l'usage, aucun redemarrage n'est necessaire.
+- Netlify: voir [NETLIFY.md](C:\Users\Utilisateur\Desktop\AnimoraTV\servera-dashboard\NETLIFY.md)
+- Render: voir [RENDER.md](C:\Users\Utilisateur\Desktop\AnimoraTV\servera-dashboard\RENDER.md)
+- Supabase: voir [SUPABASE.md](C:\Users\Utilisateur\Desktop\AnimoraTV\servera-dashboard\SUPABASE.md)

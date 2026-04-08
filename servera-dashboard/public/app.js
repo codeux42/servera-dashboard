@@ -828,7 +828,7 @@ function renderLogsPanel(dashboard) {
           </div>
           <div class="stack-row">
             <span>Sync</span>
-            <strong>SQLite direct</strong>
+            <strong>Postgres cloud</strong>
           </div>
         </div>
       </article>
@@ -967,7 +967,7 @@ function renderGeneralPanel(dashboard) {
           </div>
           <div class="stack-row">
             <span>Base de donnees</span>
-            <strong>SQLite partagee avec le bot</strong>
+            <strong>Postgres partage avec le bot</strong>
           </div>
           <div class="stack-row">
             <span>Application des changements</span>

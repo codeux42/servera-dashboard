@@ -6,10 +6,12 @@ async function run() {
   const app = createApp({
     port: 0,
     appUrl: "http://127.0.0.1",
-    databasePath: ":memory:",
+    databaseMode: "memory",
     allowDevLogin: true,
     seedDemoData: true,
   });
+
+  await app.store.ready;
 
   await new Promise((resolvePromise) => {
     app.server.listen(0, "127.0.0.1", resolvePromise);

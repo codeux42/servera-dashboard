@@ -1,55 +1,56 @@
-# Deploy Render
+# Deploy Render Free
 
-Le repo contient deja le blueprint Render a la racine:
+## Service
 
-- [render.yaml](C:\Users\Utilisateur\Desktop\AnimoraTV\render.yaml)
+Creer un `Web Service` Render avec:
 
-## Ce que ce blueprint fait
+- Name: `servera-dashboard-api`
+- Runtime: `Node`
+- Branch: `main`
+- Region: `Frankfurt`
+- Root Directory: `servera-dashboard`
+- Build Command: `npm install`
+- Start Command: `npm start`
+- Plan: `Free`
 
-- cree un web service `servera-dashboard-api`
-- utilise `servera-dashboard` comme `rootDir`
-- lance `npm install`
-- lance `npm start`
-- expose `/health`
-- configure SQLite sur `/var/data/servera-dashboard.sqlite`
-- ajoute un disque persistant Render sur `/var/data`
+## Variables Render
 
-## Deploiement
+```env
+APP_URL=https://servera-dashboard.netlify.app
+SESSION_SECRET=une-longue-cle-secrete
+DATABASE_URL=postgresql://...
+DATABASE_SSL=true
+DISCORD_CLIENT_ID=1480878152816529501
+DISCORD_CLIENT_SECRET=...
+DISCORD_REDIRECT_URI=https://servera-dashboard.netlify.app/auth/discord/callback
+DISCORD_BOT_CLIENT_ID=1480878152816529501
+DISCORD_BOT_TOKEN=...
+DISCORD_BOT_PERMISSIONS=8
+ALLOW_DEV_LOGIN=false
+SEED_DEMO_DATA=false
+```
 
-1. Ouvre Render
-2. Clique `New`
-3. Clique `Blueprint`
-4. Connecte ce repo
-5. Valide la creation
+## Base gratuite
 
-## Valeurs a fournir pendant la creation
+Utilise une base Postgres gratuite, par exemple Supabase.
+Copie simplement l'URL Postgres dans `DATABASE_URL`.
+Guide rapide: [SUPABASE.md](C:\Users\Utilisateur\Desktop\AnimoraTV\servera-dashboard\SUPABASE.md)
 
-Ces 2 valeurs ne doivent pas etre renseignees par quelqu'un d'autre que le
-proprietaire du bot ou de l'application Discord:
+## Health check
 
-- `DISCORD_CLIENT_SECRET`
-- `DISCORD_BOT_TOKEN`
+Le backend expose:
 
-Les IDs publics sont deja preconfigures:
+```txt
+/health
+```
 
-- `DISCORD_CLIENT_ID=1480878152816529501`
-- `DISCORD_BOT_CLIENT_ID=1480878152816529501`
-
-## Apres le deploy Render
-
-Si Render garde bien ce nom de service, l'URL backend sera:
+URL attendue si tu gardes le nom propose:
 
 ```txt
 https://servera-dashboard-api.onrender.com
 ```
 
-Le front Netlify est deja configure pour la viser via:
-
-- [public/_redirects](C:\Users\Utilisateur\Desktop\AnimoraTV\servera-dashboard\public\_redirects)
-
 ## Important
 
-Le plan `starter` est utilise car Render indique que les disques persistants
-sont pour les services payants. Sans disque persistant, SQLite serait perdue a
-chaque redeploiement. C'est une inference basee sur la doc Render des disques:
-[Persistent Disks](https://render.com/docs/disks)
+Le plan gratuit Render n'est pas adapte a SQLite locale persistante.
+Cette version du projet utilise donc Postgres cloud pour rester 100% gratuite.

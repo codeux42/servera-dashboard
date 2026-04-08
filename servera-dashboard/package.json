@@ -2,6 +2,9 @@
   "name": "servera-dashboard",
   "private": true,
   "type": "module",
+  "dependencies": {
+    "pg": "^8.13.1"
+  },
   "scripts": {
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",

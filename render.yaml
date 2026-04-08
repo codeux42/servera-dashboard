@@ -3,7 +3,7 @@ services:
     name: servera-dashboard-api
     runtime: node
     rootDir: servera-dashboard
-    plan: starter
+    plan: free
     region: frankfurt
     buildCommand: npm install
     startCommand: npm start
@@ -14,8 +14,10 @@ services:
         value: https://servera-dashboard.netlify.app
       - key: SESSION_SECRET
         generateValue: true
-      - key: DATABASE_PATH
-        value: /var/data/servera-dashboard.sqlite
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_SSL
+        value: "true"
       - key: DISCORD_CLIENT_ID
         value: 1480878152816529501
       - key: DISCORD_CLIENT_SECRET
@@ -32,7 +34,3 @@ services:
         value: "false"
       - key: SEED_DEMO_DATA
         value: "false"
-    disk:
-      name: servera-dashboard-data
-      mountPath: /var/data
-      sizeGB: 1

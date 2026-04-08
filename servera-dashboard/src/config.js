@@ -3,7 +3,6 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const APP_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const DEFAULT_DATABASE_PATH = resolve(APP_ROOT, "data", "servera-dashboard.sqlite");
 
 hydrateEnvFromFile(resolve(APP_ROOT, ".env"));
 
@@ -12,8 +11,11 @@ export function loadConfig(overrides = {}) {
     overrides.appUrl ?? process.env.APP_URL ?? "http://localhost:3000",
   );
   const port = parseInteger(overrides.port ?? process.env.PORT, 3000);
-  const databasePathInput =
-    overrides.databasePath ?? process.env.DATABASE_PATH ?? DEFAULT_DATABASE_PATH;
+  const databaseUrl = overrides.databaseUrl ?? process.env.DATABASE_URL ?? "";
+  const databaseMode =
+    overrides.databaseMode ??
+    process.env.DATABASE_MODE ??
+    (databaseUrl ? "postgres" : "memory");
 
   return {
     appRoot: APP_ROOT,
@@ -25,10 +27,12 @@ export function loadConfig(overrides = {}) {
       overrides.sessionSecret ??
       process.env.SESSION_SECRET ??
       "change-this-session-secret",
-    databasePath:
-      databasePathInput === ":memory:"
-        ? ":memory:"
-        : resolve(APP_ROOT, databasePathInput),
+    databaseMode,
+    databaseUrl,
+    databaseSsl: parseBoolean(
+      overrides.databaseSsl ?? process.env.DATABASE_SSL,
+      databaseMode === "postgres",
+    ),
     discord: {
       clientId: overrides.discordClientId ?? process.env.DISCORD_CLIENT_ID ?? "",
       clientSecret:
