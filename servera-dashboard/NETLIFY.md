@@ -21,7 +21,7 @@ URL attendue:
 Le front parle directement a la fonction Supabase:
 
 ```txt
-https://gxsxdcwwqxiiivtoyzha.supabase.co/functions/v1/servera-api
+https://gxsxdcwwqxiiivtoyzha.supabase.co/functions/v1/smart-worker
 ```
 
 Cette valeur est deja preparee dans:
@@ -33,10 +33,10 @@ Cette valeur est deja preparee dans:
 Dans Discord Developer Portal, ajoute exactement:
 
 ```txt
-https://gxsxdcwwqxiiivtoyzha.supabase.co/functions/v1/servera-api/auth/discord/callback
+https://gxsxdcwwqxiiivtoyzha.supabase.co/functions/v1/smart-worker/auth/discord/callback
 ```
 
 ## Important
 
 Netlify sert seulement le front. L'auth Discord et l'API passent maintenant par
-la fonction Supabase `servera-api`.
+la fonction Supabase `smart-worker`.

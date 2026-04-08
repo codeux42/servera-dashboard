@@ -366,7 +366,7 @@ function renderNotice() {
     dom.authNotice.querySelector("h3").textContent =
       "Le frontend Netlify n'est pas encore relie a la fonction Supabase.";
     dom.authNoticeText.textContent =
-      "Verifie public/runtime-config.js et le deploiement de la fonction servera-api dans Supabase, sinon la connexion Discord ne peut pas fonctionner.";
+        "Verifie public/runtime-config.js et le deploiement de la fonction smart-worker dans Supabase, sinon la connexion Discord ne peut pas fonctionner.";
     return;
   }
 

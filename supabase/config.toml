@@ -1,4 +1,4 @@
 project_id = "gxsxdcwwqxiiivtoyzha"
 
-[functions.servera-api]
+[functions.smart-worker]
 verify_jwt = false

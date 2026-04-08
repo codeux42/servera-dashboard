@@ -1,6 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
-const FUNCTION_NAME = "servera-api";
+const FUNCTION_NAME = "smart-worker";
 const FUNCTION_PATH = `/functions/v1/${FUNCTION_NAME}`;
 const SESSION_COOKIE_NAME = "servera_sid";
 const SESSION_DURATION_MS = 7 * 24 * 60 * 60 * 1000;
